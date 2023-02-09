@@ -3,35 +3,42 @@ const router = app.Router()
 
 const dbo = require('../../database')
 const ObjectId = require('mongodb').ObjectId
-router.get('/employees', (req, res, next) => {
+router.get('/employees', async (req, res, next) => {
+  await dbo.connectToServer()
   let collectionRecords = dbo.getCollection('records')
   collectionRecords
     .find({})
     .toArray((err, result) => {
         try {
             if (err) throw err
-            res.json(result)
+            res.status(200).json(result)
         } catch (error) {
             next(error)
+        } finally {
+          dbo.closeServer()
         }
     })
 })
 
-router.get('/employees/:id', (req, res, next) => {
+router.get('/employees/:id', async (req, res, next) => {
+  await dbo.connectToServer()
   let collectionRecords = dbo.getCollection('records')
   let myquery = {_id: ObjectId(req.params.id)};
   collectionRecords
     .findOne(myquery, (err, result) => {
       try {
           if (err) throw err;
-          res.json(result);
+          res.status(200).json(result);
       } catch (error) {
           next(error)
+      } finally {
+        dbo.closeServer()
       }
     });
 })
 
-router.post('/employees', (req, res, next) => {
+router.post('/employees', async (req, res, next) => {
+  await dbo.connectToServer()
   let collectionRecords = dbo.getCollection('records')
   let myobj = {
       name: req.body.name,
@@ -43,37 +50,45 @@ router.post('/employees', (req, res, next) => {
       try {
         if (err) throw err
         console.log(result)
-        res.json(result);
+        res.status(200).json(result);
       } catch(error) {
         next(error)
+      } finally {
+        dbo.closeServer()
       }
     });
 })
 
-router.put('/employees/:id', (req, res, next) => {
+router.put('/employees/:id', async (req, res, next) => {
+  await dbo.connectToServer()
   let collectionRecords = dbo.getCollection('records')
   collectionRecords
     .updateOne({_id: ObjectId(req.params.id)}, {$set: req.body}, (err, result) => {
       try {
         if (err) throw err
         console.log(result)
-        res.json(result);
+        res.status(200).json(result);
       } catch(error) {
         next(error)
+      } finally {
+        dbo.closeServer()
       }
     })
 })
 
-router.delete('/employees/:id', (req, res, next) => {
+router.delete('/employees/:id', async (req, res, next) => {
+  await dbo.connectToServer()
   let collectionRecords = dbo.getCollection('records')
   collectionRecords
     .deleteOne({_id: ObjectId(req.params.id)}, (err, result) => {
       try {
         if(err) throw err
         console.log(result)
-        res.json(result)
+        res.status(200).json(result)
       } catch (error) {
         next(error)
+      } finally {
+        dbo.closeServer()
       }
     })
 })
