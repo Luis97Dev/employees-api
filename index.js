@@ -1,10 +1,11 @@
 const path = require('path')
-require("dotenv").config({ path: path.resolve(__dirname, './config.env') })
+
+require("dotenv").config({ path: path.resolve(__dirname, './src/config.env') })
 
 const port = process.env.PORT || 5000
 
-const dbo = require('./database')
-const app = require('./server')
+const dbo = require('./src/database')
+const app = require('./src/server')
 
 app.listen(port, async () => {
     await dbo.connectToServer()

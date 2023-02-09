@@ -4,7 +4,7 @@
   "description": "First test with mongo and node js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/index.js",
+    "start": "node index.js",
     "create-collections": "node src/db/collections.js"
   },
   "author": "Luis Andahur",
